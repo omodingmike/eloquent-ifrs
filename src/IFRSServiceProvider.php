@@ -34,14 +34,18 @@ class IFRSServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config/ifrs.php' => app()->configPath('ifrs.php'),
         ]);
+	
 
-		
-		if (config('ifrs.load_migrations', true)) {
-			$this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-		}
+        $this->publishes([
+            __DIR__ . '/../database/migrations' => database_path('migrations/tenant'),
+        ], 'ifrs-tenant-migrations');
 
-		if ($this->app->runningInConsole() && config('ifrs.load_factories', true)) {
-			$this->loadFactoriesFrom(__DIR__ . '/../database/factories');
-		}				
+        if (config('ifrs.load_migrations', true)) {
+            $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        }
+
+        if ($this->app->runningInConsole() && config('ifrs.load_factories', true)) {
+            $this->loadFactoriesFrom(__DIR__ . '/../database/factories');
+        }
     }
 }
